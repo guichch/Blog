@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Call</title>
+    <script>
+        "use strict"
+        /* 
+            call函数第一个参数的特点：
+                1、严格模式：
+                    this严格指向第一个参数，如果第一个参数为null或undefined，则该参数不可拥有属性，否则报错
+                2、非严格模式
+                    若第一个参数为null或undefined，则this指向全局变量window
+                3、当输入非对象的数据类型时，不会报错
+         */
+
+        //  非严格模式
+        Function.prototype.call2 = function (obj) {
+            var result, para;
+            // 当第一个参数是null或者undefined时，this指向window
+            if (obj === null || obj === undefined) {
+                obj = window;
+            }
+            // obj = obj === null ? window : obj === undefined ? window : obj;
+
+            obj = Object(obj);
+
+            obj.fn = this;
+
+            // 参数
+            para = [];
+            for (var i = 1; i < arguments.length; i++) {
+                para.push("arguments[" + i + "]");
+            }
+            // para = ["arguments[1]", "arguments[2]", "arguments[3]",...]
+
+            // 执行
+            result = eval("obj.fn(" + para + ")");
+
+            // 删除
+            delete obj.fn;
+
+            // 返回
+            return result;
+
+
+        }
+
+        // 严格模式
+        Function.prototype.call3 = function (obj) {
+            var result, para;
+            if (obj !== null && obj !== undefined) {
+                obj = Object(obj);
+                obj.fn = this;
+                // 参数
+                para = [];
+                for (var i = 1; i < arguments.length; i++) {
+                    para.push("arguments[" + i + "]");
+                }
+                // para = ["arguments[1]", "arguments[2]", "arguments[3]",...]
+
+                // 执行
+                result = eval("obj.fn(" + para + ")");
+
+                // 删除
+                delete obj.fn;
+
+                // 返回
+                return result;
+            }else{
+                para = [];
+                for (var i = 1; i < arguments.length; i++) {
+                    para.push("arguments[" + i + "]");
+                }
+                // para = ["arguments[1]", "arguments[2]", "arguments[3]",...]
+
+                // 执行
+                result = eval("this(" + para + ")");
+                return result;
+
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
