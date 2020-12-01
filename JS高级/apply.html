@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply</title>
+    <script>
+        /* 
+            apply函数的第一个参数：
+                非严格模式：null and undefined，this指向window，当没有参数时this指向window
+                严格模式：null and undefined，this指向null或undefined，当没有参数时，this指向undefined
+            
+            apply函数的第二个参数：
+                非严格或严格模式模式：
+                    number、string、boolean类型会报错
+                    array、object、function、null和undefined不会报错
+                    若传如非数组类型，则实参为undefined
+            apply函数的第三个及以后参数：
+                随意输入，不影响函数的形参，但会影响arguments变量
+         */
+
+        // 非严格模式
+        Function.prototype.apply2 = function (obj) {
+            var result, para;
+            if (obj === null || obj === undefined){
+                obj = window;
+            }
+            obj = Object(obj);
+
+            obj.fn = this;
+
+            if(typeof arguments[1] == "number" || typeof arguments[1] == "string" || typeof arguments[1] == "boolean"){
+                throw TypeError("CreateListFromArrayLike called on non-object");
+            }
+
+            if(!Array.isArray(arguments[1])){
+                result = obj.fn();
+                delete obj.fn;
+                return result;
+            }
+
+            para = [];
+            for(var i = 0; i < arguments[1].length; i++){
+                para.push("arguments[1][" + i + "]");
+            }
+
+            // para = ["arguments[1][0]", "arguments[1][1]", "arguments[1][2]", ...]
+            result = eval("obj.fn(" + para + ")");
+            delete obj.fn;
+            return result;
+
+        }
+
+        var person = {
+            fullName: function (city, country) {
+                return this.firstName + " " + this.lastName + "," + city + "," + country;
+            }
+        }
+        var person1 = {
+            firstName: "John",
+            lastName: "Doe"
+        }
+        var result = person.fullName.apply2(person1);
+        console.log(result);
+
+    </script>
+</head>
+
+<body>
+
+</body>
+
+</html>
