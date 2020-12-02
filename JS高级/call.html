@@ -24,6 +24,7 @@
                 obj = window;
             }
             // obj = obj === null ? window : obj === undefined ? window : obj;
+            // obj = obj || window 的问题：如果obj = false，也会被赋值为window
 
             obj = Object(obj);
 
@@ -78,6 +79,8 @@
 
                 // 执行
                 result = eval("this(" + para + ")");
+                
+                // 存在的问题：无论输入是null还是undefined，this均指向undefined。
                 return result;
 
             }
