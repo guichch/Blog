@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>New</title>
+    <script>
+        function objectFactory(){
+            var obj, constructor, args, result;
+            args = [].slice.call(arguments);
+            constructor = args.shift();
+            obj = Object.create(constructor.prototype);
+            result = constructor.apply(obj, args);
+            if ((typeof result === "object" && result !== null) || typeof result === "function"){
+                return result;
+            }
+            return obj;
+        }
+    </script>
+</head>
+<body>
+    
+</body>
+</html>
